@@ -9,20 +9,29 @@ require('dotenv').config();
 const pg = require('pg');
 const client = new pg.Client(process.env.DATABASE_URL);
 
-
 const superagent = require('superagent');
 const PORT = process.env.PORT || 3001;
+
+const pg = require('pg');
+
+
 app.use(express.static('./public'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
 
-app.get('/', getForm);
+client.on('error', err => {
+  console.error(err);
+});
+
+app.get('/', getSavedBooks);
+app.get('/searchPage', getSearchPage);
 app.get('/books/:id', getBookById);
+
 app.post('/searches', getBooks);
+
 app.get('*', (request, response) => {
   response.render('pages/error');
 });
-
 
 function getBookById(request, response) {
   // get selected book by id from database, display the details on the deatils.ejs page
@@ -41,8 +50,28 @@ function getBookById(request, response) {
     .catch((err) => response.render('pages/error'));
 }
 
+function getSearchPage(request, response) {
+  response.render('pages/searchPage')
+}
 
+function getSavedBooks(request, response) {
+  let sql = 'SELECT * FROM books;';
+  let safeValues = [];
 
+  let books = []
+    client.query(sql, safeValues)
+    .then(results => {
+        if (results.rowCount > 0) {
+          console.log(results.rows.length)
+          for (let i = 0; i < results.rows.length; i++) {
+            console.log(results.rows[i])
+            let book = results.rows[i]
+            books.push(new Book(book.title, book.description, book.author, book.isbn, book.bookshelf, book.image_url));
+          }   
+        }
+        response.render('pages/index', { books: books, numBooks: books.length});
+    });
+}
 
 function getForm(request, response) {
   response.render('pages/index');
@@ -65,7 +94,14 @@ function getBooks(request, response) {
   superagent.get(url)
     .then(results => {
       let bookArray = results.body.items.map(book => {
-        return new Book(book.volumeInfo);
+        console.log(book.volumeInfo)
+        let bookInfo = book.volumeInfo
+        if (bookInfo.imageLinks) {
+          return new Book(bookInfo.title, bookInfo.authors[0], bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', bookInfo.imageLinks.smallThumbnail);
+        } else {
+          return new Book(bookInfo.title, bookInfo.authors[0], bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
+        }
+        
       });
       let returnArray = [];
       if (bookArray.length > 10) {
@@ -75,29 +111,31 @@ function getBooks(request, response) {
       }
       response.render('pages/searches/show', { books: returnArray, });
     })
-    .catch((err) => response.render('pages/error'));
+    .catch((err) => {console.log(err); response.render('pages/error')});
 }
 
 
-function Book(bookObj) {
-  // console.log(bookObj.imageLinks)
+function Book(title, author, description, isbn, bookshelf, image_url) {
+  // console.log(title, author, description, isbn, bookshelf, image_url)
   const placeholderImage = 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260';
-  if (bookObj.imageLinks) {
-    if (bookObj.imageLinks.thumbnail === '') {
+  if (image_url) {
+    if (image_url === '') {
       this.image_url = placeholderImage;
     }
-    else if (bookObj.imageLinks.thumbnail.slice(0, 5) !== 'https') {
-      this.image_url = 'https' + bookObj.imageLinks.thumbnail.slice(4, bookObj.imageLinks.thumbnail.length);
+    else if (image_url.slice(0, 5) !== 'https') {
+      this.image_url = 'https' + image_url.slice(4, image_url.length);
     } else {
-      this.image_url = bookObj.imageLinks.thumbnail;
+      this.image_url = image_url;
     }
   } else {
     this.image_url = placeholderImage;
   }
 
-  this.author = bookObj.author || 'no author available';
-  this.title = bookObj.title || 'no title available';
-  this.description = bookObj.description || 'this book has no description';
+  this.author = author || 'no author available';
+  this.title = title || 'no title available';
+  this.description = description || 'this book has no description';
+  this.isbn = isbn || '000';
+  this.bookshelf = bookshelf || "all"
 }
 
 client.connect(() => {
@@ -105,3 +143,4 @@ client.connect(() => {
     console.log(`listening on ${PORT}`);
   });
 });
+
