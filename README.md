@@ -72,3 +72,13 @@ Start time: _____
 Finish time: _____
 
 Actual time needed to complete: _____
+
+Number and name of feature: #6: Display Home Page
+
+Estimate of time needed to complete: 45 minutes
+
+Start time: 10:00am
+
+Finish time: 11:00am
+
+Actual time needed to complete: 1 hour
