@@ -73,7 +73,8 @@ Finish time: _____
 
 Actual time needed to complete: _____
 
-Number and name of feature: #6: Display Home Page
+## day two
+Number and name of feature: #1: Display Home Page
 
 Estimate of time needed to complete: 45 minutes
 
@@ -82,3 +83,17 @@ Start time: 10:00am
 Finish time: 11:00am
 
 Actual time needed to complete: 1 hour
+
+Number and name of feature: #2, Adding Single Book Detail View
+
+Estimate of time needed to complete: 45 minutes
+
+Start time: 10:15
+
+Finish time: 11:00
+
+Actual time needed to complete: 45 minutes
+
+
+
+

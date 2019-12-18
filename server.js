@@ -6,6 +6,9 @@ const app = express();
 require('ejs');
 require('dotenv').config();
 
+const pg = require('pg');
+const client = new pg.Client(process.env.DATABASE_URL);
+
 const superagent = require('superagent');
 const PORT = process.env.PORT || 3001;
 
@@ -16,21 +19,36 @@ app.use(express.static('./public'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
 
-const client = new pg.Client(process.env.DATABASE_URL);
-
 client.on('error', err => {
   console.error(err);
 });
 
 app.get('/', getSavedBooks);
-
 app.get('/searchPage', getSearchPage);
+app.get('/books/:id', getBookById);
 
 app.post('/searches', getBooks);
 
 app.get('*', (request, response) => {
   response.render('pages/error');
 });
+
+function getBookById(request, response) {
+  // get selected book by id from database, display the details on the deatils.ejs page
+  let id = request.params.id;
+
+  let sql = 'SELECT * FROM books WHERE id = $1;';
+  let safeValue = [id];
+
+  client.query(sql, safeValue)
+    .then(results => {
+      let selectedBook = results.rows[0];
+      response.render('pages/details', {
+        bookDetails: selectedBook,
+      });
+    })
+    .catch((err) => response.render('pages/error'));
+}
 
 function getSearchPage(request, response) {
   response.render('pages/searchPage')
@@ -123,5 +141,6 @@ function Book(title, author, description, isbn, bookshelf, image_url) {
 client.connect(() => {
   app.listen(PORT, () => {
     console.log(`listening on ${PORT}`);
-  })
-})
+  });
+});
+
