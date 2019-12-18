@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <link rel="stylesheet" href="/styles/reset.css" />
-  <link rel="stylesheet" href="/styles/base.css" />
-  <link rel="stylesheet" href="/styles/layout.css" />
-  <link rel="stylesheet" href="/styles/modules.css" />
-</head>
+<%- include('../partials/head') %>
 
 <body>
   <h1>Book Details</h1>
   <p><a href="/">Return to Home Page</a></p>
 
-  <section>
-    <p>Title: <%= bookDetails.title %></p>
-    <p>Author<%= bookDetails.author %></p>
-    <p>Description: <%= bookDetails.description %></p>
-    <p>Bookshelf: <%=bookDetails.isbn %></p>
-    <p>Cover Image: <%=bookDetails.isbn %></p>
-    <p>ISBN: <%=bookDetails.isbn %></p>
-  </section>
+
+
+  <ul>
+    <img src="<%=bookDetails.image_url %>">
+    <li>
+      <p>Title: <%= bookDetails.title %></p>
+      <p>Author: <%= bookDetails.author %></p>
+      <p>Description: <%= bookDetails.description %></p>
+      <p>Bookshelf: <%=bookDetails.bookshelf %></p>
+      <p>ISBN: <%=bookDetails.isbn %></p>
+    </li>
+  </ul>
 
 </body>
 
