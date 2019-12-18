@@ -94,6 +94,16 @@ Finish time: 11:00
 
 Actual time needed to complete: 45 minutes
 
+Number and name of feature: #4, Inserting a book into database
+
+Estimate of time needed to complete: 45 minutes
+
+Start time: 11:15am
+
+Finish time: 12:30pm
+
+Actual time needed to complete: 1 hour and 15 minutes
+
 
 
 

@@ -22,24 +22,38 @@ client.on('error', err => {
 
 app.get('/', getSavedBooks);
 app.get('/searchPage', getSearchPage);
-app.get('/books/:id', getBookById);
+app.get('/books/:isbn', getBookByIsbn);
 
 app.post('/searches', getBooks);
+
+app.post('/books/insert', insertBook);
 
 app.get('*', (request, response) => {
   response.render('pages/error');
 });
 
-function getBookById(request, response) {
-  // get selected book by id from database, display the details on the deatils.ejs page
-  let id = request.params.id;
-  console.log("ID", id, "request", request)
-
-  let sql = 'SELECT * FROM books WHERE id = $1;';
-  let safeValue = [id];
-
+function insertBook(request, response) {
+  let book = request.body
+  // console.log(book)
+  let sql = 'INSERT INTO books (title, description, author, isbn, bookshelf, image_url) VALUES($1, $2, $3, $4, $5, $6);';
+  let safeValue = [book.title, book.description, book.author, book.isbn, book.bookshelf, book.image_url];
   client.query(sql, safeValue)
+  response.redirect('/books/' + book.isbn)
+}
+
+function getBookByIsbn(request, response) {
+  // get selected book by id from database, display the details on the deatils.ejs page
+  console.log(request.params)
+  let isbn = request.params.isbn;
+  console.log(isbn)
+  // console.log("ISBN", isbn, "request", request)
+
+  let sql = 'SELECT * FROM books WHERE isbn = $1;';
+  let safeValues = [isbn];
+
+  client.query(sql, safeValues)
     .then(results => {
+      console.log(results)
       let selectedBook = results.rows[0];
       response.render('pages/details', {
         bookDetails: selectedBook,
