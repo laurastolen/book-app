@@ -12,9 +12,6 @@ const client = new pg.Client(process.env.DATABASE_URL);
 const superagent = require('superagent');
 const PORT = process.env.PORT || 3001;
 
-const pg = require('pg');
-
-
 app.use(express.static('./public'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
@@ -36,6 +33,7 @@ app.get('*', (request, response) => {
 function getBookById(request, response) {
   // get selected book by id from database, display the details on the deatils.ejs page
   let id = request.params.id;
+  console.log("ID", id, "request", request)
 
   let sql = 'SELECT * FROM books WHERE id = $1;';
   let safeValue = [id];
@@ -47,7 +45,7 @@ function getBookById(request, response) {
         bookDetails: selectedBook,
       });
     })
-    .catch((err) => response.render('pages/error'));
+    .catch((err) => {console.log(err); response.render('pages/error')});
 }
 
 function getSearchPage(request, response) {
@@ -62,15 +60,14 @@ function getSavedBooks(request, response) {
     client.query(sql, safeValues)
     .then(results => {
         if (results.rowCount > 0) {
-          console.log(results.rows.length)
           for (let i = 0; i < results.rows.length; i++) {
-            console.log(results.rows[i])
             let book = results.rows[i]
-            books.push(new Book(book.title, book.description, book.author, book.isbn, book.bookshelf, book.image_url));
+            books.push(new Book(book.id, book.title, book.description, book.author, book.isbn, book.bookshelf, book.image_url));
           }   
         }
         response.render('pages/index', { books: books, numBooks: books.length});
-    });
+    })
+    .catch((err) => {console.log(err); response.render('pages/error')});
 }
 
 function getForm(request, response) {
@@ -94,12 +91,11 @@ function getBooks(request, response) {
   superagent.get(url)
     .then(results => {
       let bookArray = results.body.items.map(book => {
-        console.log(book.volumeInfo)
         let bookInfo = book.volumeInfo
         if (bookInfo.imageLinks) {
-          return new Book(bookInfo.title, bookInfo.authors[0], bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', bookInfo.imageLinks.smallThumbnail);
+          return new Book("1531345143", bookInfo.title, bookInfo.authors[0], bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', bookInfo.imageLinks.smallThumbnail);
         } else {
-          return new Book(bookInfo.title, bookInfo.authors[0], bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
+          return new Book("1245151451", bookInfo.title, bookInfo.authors[0], bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
         }
         
       });
@@ -115,7 +111,7 @@ function getBooks(request, response) {
 }
 
 
-function Book(title, author, description, isbn, bookshelf, image_url) {
+function Book(id, title, author, description, isbn, bookshelf, image_url) {
   // console.log(title, author, description, isbn, bookshelf, image_url)
   const placeholderImage = 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260';
   if (image_url) {
@@ -131,6 +127,7 @@ function Book(title, author, description, isbn, bookshelf, image_url) {
     this.image_url = placeholderImage;
   }
 
+  this.id = id;
   this.author = author || 'no author available';
   this.title = title || 'no title available';
   this.description = description || 'this book has no description';
