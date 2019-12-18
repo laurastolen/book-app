@@ -4,6 +4,11 @@
 const express = require('express');
 const app = express();
 require('ejs');
+require('dotenv').config();
+
+const pg = require('pg');
+const client = new pg.Client(process.env.DATABASE_URL);
+
 
 const superagent = require('superagent');
 const PORT = process.env.PORT || 3001;
@@ -12,10 +17,32 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded());
 
 app.get('/', getForm);
+app.get('/books/:id', getBookById);
 app.post('/searches', getBooks);
 app.get('*', (request, response) => {
   response.render('pages/error');
 });
+
+
+function getBookById(request, response) {
+  // get selected book by id from database, display the details on the deatils.ejs page
+  let id = request.params.id;
+
+  let sql = 'SELECT * FROM books WHERE id = $1;';
+  let safeValue = [id];
+
+  client.query(sql, safeValue)
+    .then(results => {
+      let selectedBook = results.rows[0];
+      response.render('pages/details', {
+        bookDetails: selectedBook,
+      });
+    })
+    .catch((err) => response.render('pages/error'));
+}
+
+
+
 
 function getForm(request, response) {
   response.render('pages/index');
@@ -73,4 +100,8 @@ function Book(bookObj) {
   this.description = bookObj.description || 'this book has no description';
 }
 
-app.listen(PORT, () => console.log(`listening on ${PORT}`));
+client.connect(() => {
+  app.listen(PORT, () => {
+    console.log(`listening on ${PORT}`);
+  });
+});
