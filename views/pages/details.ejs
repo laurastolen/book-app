@@ -18,6 +18,15 @@
       <p>Bookshelf: <%=bookDetails.bookshelf %></p>
       <p>ISBN: <%=bookDetails.isbn %></p>
     </li>
+    <form action="<%= '/books/updatebook?_method=PUT' %>" method='post'>
+      <input type='text' name='title' value="<%= bookDetails.title %>">
+      <input type='text' name='author' value="<%= bookDetails.author %>">
+      <input type='hidden' name='isbn' value="<%= bookDetails.isbn %>">
+      <input type='text' name='bookshelf' value="<%= bookDetails.bookshelf %>">
+      <textarea type='textarea' rows="10" cols="63" name='description' value="<%= bookDetails.description %>"><%= bookDetails.description %></textarea>
+      <input type='hidden' name='image_url' value="<%= bookDetails.image_url %>">
+      <button type="submit">Update Book Information</button>
+    </form>
   </ul>
 
 </body>

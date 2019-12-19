@@ -104,6 +104,28 @@ Finish time: 12:30pm
 
 Actual time needed to complete: 1 hour and 15 minutes
 
+## day three
+
+Number and name of feature: #1, Updating Books in the database
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 9:45am
+
+Finish time: 10:00am
+
+Actual time needed to complete: 15 minutes
+
+Number and name of feature: #2, Showing and hiding edit fields for updating books
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 10:00am
+
+Finish time: 10:25am
+
+Actual time needed to complete: 25 minutes
+
 
 
 

@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 require('ejs');
 require('dotenv').config();
+const methodOverride = require('method-override');
 
 const pg = require('pg');
 const client = new pg.Client(process.env.DATABASE_URL);
@@ -15,22 +16,36 @@ const PORT = process.env.PORT || 3001;
 app.use(express.static('./public'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded());
+app.use(methodOverride('_method'));
 
 client.on('error', err => {
   console.error(err);
 });
 
+//Get Book Data
 app.get('/', getSavedBooks);
 app.get('/searchPage', getSearchPage);
 app.get('/books/:isbn', getBookByIsbn);
-
 app.post('/searches', getBooks);
 
+//Insert Book Data
 app.post('/books/insert', insertBook);
+
+//Update Book Data
+app.put('/books/updatebook', updateBook);
 
 app.get('*', (request, response) => {
   response.render('pages/error');
 });
+
+function updateBook(request, response) {
+  let book = request.body
+  console.log(book)
+  let sql = 'UPDATE books SET title=$1, description=$2, author=$3, bookshelf=$4 WHERE isbn=$5;';
+  let safeValue = [book.title, book.description, book.author, book.bookshelf, book.isbn,];
+  client.query(sql, safeValue)
+  response.redirect('/books/' + book.isbn)
+}
 
 function insertBook(request, response) {
   let book = request.body
