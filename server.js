@@ -36,9 +36,22 @@ app.post('/books/insert', insertBook);
 //Update Book Data
 app.put('/books/updatebook', updateBook);
 
+//Delete Book Data
+app.delete('/books/deleteBook', deleteBook)
+
 app.get('*', (request, response) => {
   response.render('pages/error');
 });
+
+function deleteBook(request, response) {
+  let book = request.body
+  console.log(book)
+  console.log("DELETEING")
+  let sql = 'DELETE FROM books WHERE isbn=$1;';
+  let safeValue = [book.isbn];
+  client.query(sql, safeValue)
+  response.redirect('/')
+}
 
 function updateBook(request, response) {
   let book = request.body

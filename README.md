@@ -136,6 +136,15 @@ Finish time: 11:30am
 
 Actual time needed to complete: 1 hour
 
+Number and name of feature: #4, Added delete functionality to the details page
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 11:35am
+
+Finish time: 11:45am
+
+Actual time needed to complete: 10 minutes
 
 
 
