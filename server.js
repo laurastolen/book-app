@@ -22,6 +22,8 @@ client.on('error', err => {
   console.error(err);
 });
 
+const bookshelfOptions = ["All", "Fiction", "Non-Fiction", "Sci-Fi", "Romance", "Children's Books", "Fantasy"]
+
 //Get Book Data
 app.get('/', getSavedBooks);
 app.get('/searchPage', getSearchPage);
@@ -40,7 +42,6 @@ app.get('*', (request, response) => {
 
 function updateBook(request, response) {
   let book = request.body
-  console.log(book)
   let sql = 'UPDATE books SET title=$1, description=$2, author=$3, bookshelf=$4 WHERE isbn=$5;';
   let safeValue = [book.title, book.description, book.author, book.bookshelf, book.isbn,];
   client.query(sql, safeValue)
@@ -58,9 +59,7 @@ function insertBook(request, response) {
 
 function getBookByIsbn(request, response) {
   // get selected book by id from database, display the details on the deatils.ejs page
-  console.log(request.params)
   let isbn = request.params.isbn;
-  console.log(isbn)
   // console.log("ISBN", isbn, "request", request)
 
   let sql = 'SELECT * FROM books WHERE isbn = $1;';
@@ -68,10 +67,10 @@ function getBookByIsbn(request, response) {
 
   client.query(sql, safeValues)
     .then(results => {
-      console.log(results)
       let selectedBook = results.rows[0];
       response.render('pages/details', {
         bookDetails: selectedBook,
+        bookshelves: bookshelfOptions
       });
     })
     .catch((err) => {console.log(err); response.render('pages/error')});
@@ -134,7 +133,7 @@ function getBooks(request, response) {
       } else {
         returnArray = bookArray;
       }
-      response.render('pages/searches/show', { books: returnArray, });
+      response.render('pages/searches/show', { books: returnArray, bookshelves: bookshelfOptions});
     })
     .catch((err) => {console.log(err); response.render('pages/error')});
 }
@@ -161,7 +160,7 @@ function Book(id, title, author, description, isbn, bookshelf, image_url) {
   this.title = title || 'no title available';
   this.description = description || 'this book has no description';
   this.isbn = isbn || '000';
-  this.bookshelf = bookshelf || "all"
+  this.bookshelf = bookshelf || "All"
 }
 
 client.connect(() => {

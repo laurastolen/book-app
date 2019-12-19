@@ -6,18 +6,23 @@
 <body>
   <h1>Search Results</h1>
   <p><a href="/">Home</a></p>
-  <ul>
-    <% books.forEach(book => { %>
+  <ul id="bookList">
+    <% books.forEach((book, index) => { %>
     <img src=<%= book.image_url %>>
     <li><%= book.title %><br><%=book.author%><br><%= book.description %></li>
 
-    <button id="edit" type="submit">Edit Book</button>
+    <button id="editButton<%= index %>" type="submit">Edit Book</button>
 
-    <form id="showEditForm" action="/books/insert" method='post'>
+    <form id="showEditForm<%= index %>" class="editForm" action="/books/insert" method='post'>
       <input type='text' name='title' value="<%= book.title %>" required>
       <input type='text' name='author' value="<%= book.author %>" required>
       <input type='hidden' name='isbn' value="<%= book.isbn %>" required>
-      <input type='text' name='bookshelf' value="<%= book.bookshelf %>" required>
+      <select name='bookshelf' value="<%= book.bookshelf %>">
+          <% bookshelves.forEach((bookshelf) => { %>
+            <option value="<%= bookshelf %>"><%= bookshelf %></option>
+            
+            <% }) %>
+      </select>
       <input type='hidden' name='image_url' value="<%= book.image_url %>">
       <textarea type='textarea' rows="10" cols="63" name='description' value="<%= book.description %>"><%= book.description %></textarea> 
       <button type="submit">Add to bookshelf</button>
