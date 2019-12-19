@@ -3,14 +3,22 @@
 
 $(document).ready(function() {
     console.log("TRYING TO HIDE")
-    $('#showEditForm input').hide();
-    $('#showEditForm textarea').hide();
+    $('.editForm input').hide();
+    $('.editForm textarea').hide();
+    $('.editForm select').hide();
+
 })
 
-const $newSelector = $('#edit')
+const $newSelector = $('button')
 
-$newSelector.click(function () {
-    console.log("TRYING TO SHOW")
-    $('#showEditForm input').show();
-    $('#showEditForm textarea').show();
+$newSelector.click(function() {
+    let buttonNum = event.target.id
+    console.log("TRYING TO SHOW", buttonNum);
+    console.log(buttonNum.substring(10))
+    let idNum = buttonNum.substring(10)
+
+    console.log('.showEditForm' + idNum +' input')
+    $('#showEditForm' + idNum +' input').show();
+    $('#showEditForm' + idNum +' textarea').show();
+    $('#showEditForm' + idNum +' select').show();
 })

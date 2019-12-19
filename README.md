@@ -126,6 +126,16 @@ Finish time: 10:25am
 
 Actual time needed to complete: 25 minutes
 
+Number and name of feature: #3, Fixed Edit button functionality and turned bookshelf into a selector value
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 10:30am
+
+Finish time: 11:30am
+
+Actual time needed to complete: 1 hour
+
 
 
 
