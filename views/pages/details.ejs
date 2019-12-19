@@ -32,6 +32,10 @@
       <input type='hidden' name='image_url' value="<%= bookDetails.image_url %>">
       <button type="submit">Update Book Information</button>
     </form>
+    <form action="<%= '/books/deleteBook?_method=DELETE' %>" method='post'>
+      <input type='hidden' name='isbn' value="<%= bookDetails.isbn %>">
+      <button type="submit">Delete Book</button>
+    </form>
   </ul>
 
 </body>
