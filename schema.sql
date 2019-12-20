@@ -8,8 +8,20 @@ CREATE TABLE books (
   image_url VARCHAR(255)
 );
 
-INSERT INTO books ( title, description, author, isbn, bookshelf, image_url) 
-VALUES('Book', 'a really good book', 'Laura', '11122', 'fiction', 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
+INSERT INTO books (bookshelf, isbn) 
+VALUES('fiction', 'dummy data - fiction');
 
-INSERT INTO books (title, description, author, isbn, bookshelf, image_url) 
-VALUES('Book2', 'a really good book2', 'Kai', '11123', 'non-fiction', 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
+INSERT INTO books (bookshelf, isbn) 
+VALUES('non-fiction', 'dummy data - non-fiction');
+
+INSERT INTO books (bookshelf, isbn) 
+VALUES('sci-fi', 'dummy data - sci-fi');
+
+INSERT INTO books (bookshelf, isbn) 
+VALUES('romance', 'dummy data - romance');
+
+INSERT INTO books (bookshelf, isbn) 
+VALUES('young adult', 'dummy data - young adult');
+
+INSERT INTO books (bookshelf, isbn) 
+VALUES('history', 'dummy data - history');
