@@ -86,7 +86,7 @@ function getBookByIsbn(request, response) {
         bookshelves: bookshelfOptions
       });
     })
-    .catch((err) => {console.log(err); response.render('pages/error')});
+    .catch((err) => { console.log(err); response.render('pages/error') });
 }
 
 function getSearchPage(request, response) {
@@ -98,17 +98,17 @@ function getSavedBooks(request, response) {
   let safeValues = [];
 
   let books = []
-    client.query(sql, safeValues)
+  client.query(sql, safeValues)
     .then(results => {
-        if (results.rowCount > 0) {
-          for (let i = 0; i < results.rows.length; i++) {
-            let book = results.rows[i]
-            books.push(new Book(book.id, book.title, book.description, book.author, book.isbn, book.bookshelf, book.image_url));
-          }   
+      if (results.rowCount > 0) {
+        for (let i = 0; i < results.rows.length; i++) {
+          let book = results.rows[i]
+          books.push(new Book(book.id, book.title, book.author, book.description, book.isbn, book.bookshelf, book.image_url));
         }
-        response.render('pages/index', { books: books, numBooks: books.length});
+      }
+      response.render('pages/index', { books: books, numBooks: books.length });
     })
-    .catch((err) => {console.log(err); response.render('pages/error')});
+    .catch((err) => { console.log(err); response.render('pages/error') });
 }
 
 function getForm(request, response) {
@@ -138,7 +138,7 @@ function getBooks(request, response) {
         } else {
           return new Book("1245151451", bookInfo.title, bookInfo.authors[0], bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
         }
-        
+
       });
       let returnArray = [];
       if (bookArray.length > 10) {
@@ -146,9 +146,9 @@ function getBooks(request, response) {
       } else {
         returnArray = bookArray;
       }
-      response.render('pages/searches/show', { books: returnArray, bookshelves: bookshelfOptions});
+      response.render('pages/searches/show', { books: returnArray, bookshelves: bookshelfOptions });
     })
-    .catch((err) => {console.log(err); response.render('pages/error')});
+    .catch((err) => { console.log(err); response.render('pages/error') });
 }
 
 

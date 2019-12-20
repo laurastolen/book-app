@@ -1,0 +1,62 @@
+*, header {
+  font-family: 'Raleway', sans-serif;
+}
+
+section {
+  background-color: #D9D9D9;
+}
+
+ul {
+  margin: 2%;
+}
+
+li {
+  font-size: 16px;
+  line-height: 1.5em;
+}
+
+img {
+  border: 2px solid #353535;
+  border-radius: 5px;
+}
+
+button {
+  margin: 3% 0;
+  border-radius: 5px;
+  background-color: #D9D9D9;
+  border: 2px ridge #284B63;
+}
+
+h1, h2, a, fieldset, h4 {
+  margin: 1%;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+a {
+  background-color: #D9D9D9;
+}
+
+:visited {
+  color: #111E1F;
+}
+
+#details-form, .editForm {
+  display: flex;
+  flex-direction: column;
+}
+
+#details-form input, textarea, select {
+margin: 1%;
+}
+
+textarea {
+  height: 100px;
+}
+
+#search-text {
+  background-color: #D9D9D9;
+}

@@ -4,8 +4,11 @@
 <%- include('../../partials/head') %>
 
 <body>
-  <h1>Search Results</h1>
-  <p><a href="/">Home</a></p>
+  <section>
+    <h1>Search Results</h1>
+    <a href="/">Return to Home Page</a>
+  </section>
+
   <ul id="bookList">
     <% books.forEach((book, index) => { %>
     <img src=<%= book.image_url %>>
@@ -18,18 +21,20 @@
       <input type='text' name='author' value="<%= book.author %>" required>
       <input type='hidden' name='isbn' value="<%= book.isbn %>" required>
       <select name='bookshelf' value="<%= book.bookshelf %>">
-          <% bookshelves.forEach((bookshelf) => { %>
-            <option value="<%= bookshelf %>"><%= bookshelf %></option>
-            
-            <% }) %>
+        <% bookshelves.forEach((bookshelf) => { %>
+        <option value="<%= bookshelf %>"><%= bookshelf %></option>
+
+
+        <% }) %>
       </select>
       <input type='hidden' name='image_url' value="<%= book.image_url %>">
-      <textarea type='textarea' rows="10" cols="63" name='description' value="<%= book.description %>"><%= book.description %></textarea> 
+      <textarea type='textarea' name='description' value="<%= book.description %>"><%= book.description %></textarea>
       <button type="submit">Add to bookshelf</button>
     </form>
+    <hr>
     <% }) %>
   </ul>
-  
+
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 

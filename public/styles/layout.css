@@ -1,0 +1,29 @@
+img {
+  max-width: 350px;
+  align-self: center;
+}
+
+ul {
+  align-self: center;
+  width: 350px;
+  font-family: 'Raleway', sans-serif;
+
+}
+
+section, h4, form {
+  font-family: 'Raleway', sans-serif;
+}
+
+h1, h2 {
+  background-color: #D9D9D9;
+  height: 50px;
+}
+
+button {
+  height: 50px;
+}
+
+form {
+  align-self: center;
+}
+
