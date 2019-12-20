@@ -4,17 +4,22 @@
 <%- include('../partials/head') %>
 
 <body>
-  <h1>YOUR BOOKS!</h1>
-  <h2>YOU HAVE <%= numBooks %> BOOKS!</h2>
+  <section>
+    <h1>Welcome To Your Book Collection!</h1>
+    <h2>Total Books In Your Collection: <%= numBooks %></h2>
+  </section>
+
   <form action='/searchPage' method='get'>
     <button type="submit">Search the Google Books API</button>
   </form>
+
   <ul>
     <% books.forEach(book => { %>
     <img src=<%= book.image_url %>>
-    <li><%= book.title %><br><%=book.author%><br><%= book.description %></li>
+    <li>Title: <%= book.title %><br>Author: <%=book.author%><br>Description: <%= book.description %></li>
     <form action="/books/<%= book.isbn %>" method='get'>
       <button type="submit">Get Details</button>
+      <hr>
     </form>
     <% }) %>
   </ul>

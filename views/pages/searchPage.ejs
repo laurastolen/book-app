@@ -4,28 +4,31 @@
 <%- include('../partials/head') %>
 
 <body>
-  <main>
-    <h1>Best Books!</h1>
-    <h4>Search by Title or Author</h4>
-    <!-- action visits the route and method is the route method -->
-    <form action='/searches' method='post'>
-      <input id="search-text" type="text" name="search" placeholder="Enter a title or author" required>
-      <fieldset>
-        <label for="title">
-          <span>Title</span>
-          <input type="radio" name="search" value="title" required>
-        </label>
-      </fieldset>
 
-      <fieldset>
-        <label for="author">
-          <span>Author</span>
-          <input type="radio" name="search" value="author" required>
-        </label>
-      </fieldset>
-      <button type="submit">Search the Google Books API</button>
-    </form>
-  </main>
+  <section>
+    <h1>Book Details</h1>
+    <a href="/">Return to Home Page</a>
+  </section>
+  <h4>Search by Title or Author</h4>
+  <!-- action visits the route and method is the route method -->
+  <form action='/searches' method='post'>
+    <input id="search-text" type="text" name="search" placeholder="Enter a title or author" required>
+    <fieldset>
+      <label for="title">
+        <span>Title</span>
+        <input type="radio" name="search" value="title" required>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <label for="author">
+        <span>Author</span>
+        <input type="radio" name="search" value="author" required>
+      </label>
+    </fieldset>
+    <button type="submit">Search the Google Books API</button>
+  </form>
+
 </body>
 
 </html>

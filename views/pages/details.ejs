@@ -4,10 +4,10 @@
 <%- include('../partials/head') %>
 
 <body>
-  <h1>Book Details</h1>
-  <p><a href="/">Return to Home Page</a></p>
-
-
+  <section>
+    <h1>Book Details</h1>
+    <a href="/">Return to Home Page</a>
+  </section>
 
   <ul>
     <img src="<%=bookDetails.image_url %>">
@@ -18,17 +18,18 @@
       <p>Bookshelf: <%=bookDetails.bookshelf %></p>
       <p>ISBN: <%=bookDetails.isbn %></p>
     </li>
-    <form action="<%= '/books/updatebook?_method=PUT' %>" method='post'>
+    <form id="details-form" action="<%= '/books/updatebook?_method=PUT' %>" method='post'>
       <input type='text' name='title' value="<%= bookDetails.title %>">
       <input type='text' name='author' value="<%= bookDetails.author %>">
       <input type='hidden' name='isbn' value="<%= bookDetails.isbn %>">
       <select name='bookshelf' value="<%= bookDetails.bookshelf %>">
-          <% bookshelves.forEach((bookshelf) => { %>
-            <option value="<%= bookshelf %>"><%= bookshelf %></option>
-            
-            <% }) %>
+        <% bookshelves.forEach((bookshelf) => { %>
+        <option value="<%= bookshelf %>"><%= bookshelf %></option>
+
+        <% }) %>
       </select>
-      <textarea type='textarea' rows="10" cols="63" name='description' value="<%= bookDetails.description %>"><%= bookDetails.description %></textarea>
+      <textarea type='textarea' name='description'
+        value="<%= bookDetails.description %>"><%= bookDetails.description %></textarea>
       <input type='hidden' name='image_url' value="<%= bookDetails.image_url %>">
       <button type="submit">Update Book Information</button>
     </form>
