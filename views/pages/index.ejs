@@ -16,7 +16,7 @@
   <ul>
     <% books.forEach(book => { %>
     <img src=<%= book.image_url %>>
-    <li>Title: <%= book.title %><br>Author: <%=book.author%><br>Description: <%= book.description %></li>
+    <li>Title: <%= book.title %><br>Author: <%= book.authors %><br>Description: <%= book.description %></li>
     <form action="/books/<%= book.isbn %>" method='get'>
       <button type="submit">Get Details</button>
       <hr>

@@ -45,8 +45,6 @@ app.get('*', (request, response) => {
 
 function deleteBook(request, response) {
   let book = request.body
-  console.log(book)
-  console.log("DELETEING")
   let sql = 'DELETE FROM books WHERE isbn=$1;';
   let safeValue = [book.isbn];
   client.query(sql, safeValue)
@@ -58,22 +56,20 @@ function updateBook(request, response) {
   let sql = 'UPDATE books SET title=$1, description=$2, author=$3, bookshelf=$4 WHERE isbn=$5;';
   let safeValue = [book.title, book.description, book.author, book.bookshelf, book.isbn,];
   client.query(sql, safeValue)
-  response.redirect('/books/' + book.isbn)
+  response.redirect('/')
 }
 
 function insertBook(request, response) {
+  console.log('in the insertbook fx')
   let book = request.body
-  // console.log(book)
   let sql = 'INSERT INTO books (title, description, author, isbn, bookshelf, image_url) VALUES($1, $2, $3, $4, $5, $6);';
-  let safeValue = [book.title, book.description, book.author, book.isbn, book.bookshelf, book.image_url];
-  client.query(sql, safeValue)
-  response.redirect('/books/' + book.isbn)
+  let safeValues = [book.title, book.description, book.author, book.isbn, book.bookshelf, book.image_url];
+  client.query(sql, safeValues)
+  response.redirect('/')
 }
 
 function getBookByIsbn(request, response) {
-  // get selected book by id from database, display the details on the deatils.ejs page
   let isbn = request.params.isbn;
-  // console.log("ISBN", isbn, "request", request)
 
   let sql = 'SELECT * FROM books WHERE isbn = $1;';
   let safeValues = [isbn];
@@ -94,7 +90,7 @@ function getSearchPage(request, response) {
 }
 
 function getSavedBooks(request, response) {
-  let sql = 'SELECT * FROM books;';
+  let sql = 'SELECT * FROM books WHERE title IS NOT NULL;';
   let safeValues = [];
 
   let books = []
@@ -103,7 +99,7 @@ function getSavedBooks(request, response) {
       if (results.rowCount > 0) {
         for (let i = 0; i < results.rows.length; i++) {
           let book = results.rows[i]
-          books.push(new Book(book.id, book.title, book.author, book.description, book.isbn, book.bookshelf, book.image_url));
+          books.push(new Book(book.title, book.author, book.description, book.isbn, book.bookshelf, book.image_url));
         }
       }
       response.render('pages/index', { books: books, numBooks: books.length });
@@ -134,9 +130,9 @@ function getBooks(request, response) {
       let bookArray = results.body.items.map(book => {
         let bookInfo = book.volumeInfo
         if (bookInfo.imageLinks) {
-          return new Book("1531345143", bookInfo.title, bookInfo.authors[0], bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', bookInfo.imageLinks.smallThumbnail);
+          return new Book(bookInfo.title, bookInfo.authors, bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', bookInfo.imageLinks.smallThumbnail);
         } else {
-          return new Book("1245151451", bookInfo.title, bookInfo.authors[0], bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
+          return new Book(bookInfo.title, bookInfo.authors, bookInfo.description, bookInfo.industryIdentifiers[0].identifier, 'all', 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260');
         }
 
       });
@@ -152,7 +148,7 @@ function getBooks(request, response) {
 }
 
 
-function Book(id, title, author, description, isbn, bookshelf, image_url) {
+function Book(title, authors, description, isbn, bookshelf, image_url) {
   // console.log(title, author, description, isbn, bookshelf, image_url)
   const placeholderImage = 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260';
   if (image_url) {
@@ -168,8 +164,13 @@ function Book(id, title, author, description, isbn, bookshelf, image_url) {
     this.image_url = placeholderImage;
   }
 
-  this.id = id;
-  this.author = author || 'no author available';
+  if (authors === undefined) {
+    console.log('no authors')
+    this.authors = 'no author available';
+  } else {
+    this.authors = authors;
+  }
+  // this.authors = authors || 'no author available';
   this.title = title || 'no title available';
   this.description = description || 'this book has no description';
   this.isbn = isbn || '000';
