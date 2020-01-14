@@ -60,7 +60,6 @@ function updateBook(request, response) {
 }
 
 function insertBook(request, response) {
-  console.log('in the insertbook fx')
   let book = request.body
   let sql = 'INSERT INTO books (title, description, author, isbn, bookshelf, image_url) VALUES($1, $2, $3, $4, $5, $6);';
   let safeValues = [book.title, book.description, book.author, book.isbn, book.bookshelf, book.image_url];
@@ -149,7 +148,6 @@ function getBooks(request, response) {
 
 
 function Book(title, authors, description, isbn, bookshelf, image_url) {
-  // console.log(title, author, description, isbn, bookshelf, image_url)
   const placeholderImage = 'https://images.pexels.com/photos/1005324/literature-book-open-pages-1005324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260';
   if (image_url) {
     if (image_url === '') {
@@ -165,12 +163,10 @@ function Book(title, authors, description, isbn, bookshelf, image_url) {
   }
 
   if (authors === undefined) {
-    console.log('no authors')
     this.authors = 'no author available';
   } else {
     this.authors = authors;
   }
-  // this.authors = authors || 'no author available';
   this.title = title || 'no title available';
   this.description = description || 'this book has no description';
   this.isbn = isbn || '000';
